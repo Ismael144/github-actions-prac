@@ -1,0 +1,34 @@
+name: Manual Event Trigger with Parsing 
+
+on: 
+  workflow_dispatch: 
+    inputs: 
+      name: 
+        description: "Name of the person to greet"
+        required: true
+        type: string
+
+      greetings: 
+        description: "Type of greeting"
+        required: true 
+        type: string 
+
+      data: 
+        description: "Base64 content of the file"
+        required: false
+        type: string
+
+jobs: 
+  greetings: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: "Decode File Content"
+        run: | 
+          echo "${{inputs.data}}" | Base64 --decode > ./base64decode.txt
+      - name: "Display greeting"
+        run: | 
+          echo "${{inputs.name}}, ${{inputs.greetings}}"
+      - name: "Content of the file"
+        run: | 
+          echo "Viewing contents of file"
+          cat ./base64decode.txt
